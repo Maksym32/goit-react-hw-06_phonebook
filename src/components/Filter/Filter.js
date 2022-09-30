@@ -1,28 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { changeFilter } from "../../Redux/contacts-actions";
-import { Section } from "../Section/Section";
 
 
-const Filter = ({ value, onChange }) => (
-  <Section>
-    <label htmlFor="search">
-      <h2>Find contacts by name</h2>
-      <input id="search" type="text" value={value} onChange={onChange}></input>
-    </label>
-  </Section>
-);
+import { useDispatch, useSelector } from 'react-redux';
+import { changeFilter } from '../../Redux/contactsSlice';
 
-Filter.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
-};
-
-const mapStateToProps = (state) => ({ value: state.contacts.filter });
-
-const mapDispatchToProps = (dispatch) => ({
-  onChange: (e) => dispatch(changeFilter(e.target.value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Filter);
+export const Filter = () => {
+  const myFilter = useSelector(store => store.contacts.filter);
+  const dispatch = useDispatch();
+  return (
+    <div>
+      <h3>Find contacts by name</h3>
+        <input
+          type="text"
+          value={myFilter}
+          onChange={evt => dispatch(changeFilter(evt.currentTarget.value))} />
+        </div>
+    )
+}

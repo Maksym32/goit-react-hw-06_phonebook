@@ -1,24 +1,26 @@
-import Form from "./components/Form/Form";
-import Filter from "./components/Filter/Filter";
-import Contacts from "./components/Contacts/Contacts";
+import { useSelector } from 'react-redux';
+import { InputForm } from './components/Form/Form';
+import { Filter } from './components/Filter/Filter';
+import { ContactList } from './components/Contacts/ContactList';
+import { InputFormBox } from './components/Form/Form.styled';
+import { ContactListBox } from './components/Contacts/ContactList.styled';
 
-import { connect } from "react-redux";
-import { addContact } from "./Redux/contacts-actions";
+export function App() {
+  const contacts = useSelector(store => store.contacts.items);
+  const myFilter = useSelector(store => store.contacts.filter);
+  const normalizedFilter = myFilter.toLowerCase();
+  const filteredContacts = contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
 
-function App() {
   return (
-    <div className="App">
-      <Form />
-      <Filter />
-      <Contacts />
-    </div>
+    <>
+      <InputFormBox>
+        <h1 style={{textAlign: 'center'}}>Phonebook</h1>
+        <InputForm/>
+      </InputFormBox>
+      <ContactListBox>
+        <Filter/>
+          <ContactList contacts={filteredContacts}/> 
+      </ContactListBox>
+    </>
   );
 }
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: ({ name, number }) => dispatch(addContact({ name, number })),
-});
-
-export default connect(null, mapDispatchToProps)(App);
-
-export { App };
